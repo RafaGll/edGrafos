@@ -14,7 +14,7 @@ public class Marvel {
 		
 	}
 	public static String [][] readCsv ()  {
-		readCsv arrayCompleto = new readCsv ("/home/ivyn/Descargas/marvel-unimodal-edges.csv");
+		readCsv arrayCompleto = new readCsv ("~/Documentos/Java/marvel-unimodal-edges.csv");
 		String [][] csvLeido = arrayCompleto.getArrayCsv();
 		return csvLeido;
 	}
