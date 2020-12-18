@@ -23,7 +23,7 @@ public class readCsv {
 			int i = 0;
 			lectura = new Scanner (csv);
 			while(lectura.hasNext()) {
-				String line = lectura.nextLine();
+				String line = lectura.nextLine().replaceAll(", "," ");
 				StringTokenizer tokenizer = new StringTokenizer(line, ",");
 				arrayCsv[i][0] = tokenizer.nextToken();
 				arrayCsv[i][1] = tokenizer.nextToken();

@@ -14,14 +14,14 @@ public class Marvel {
 		
 	}
 	public static String [][] readCsv ()  {
-		readCsv arrayCompleto = new readCsv ("~/Documentos/Java/marvel-unimodal-edges.csv");
+		readCsv arrayCompleto = new readCsv ("/home/rafagl/Documentos/Java/marvel-unimodal-edges.csv");
 		String [][] csvLeido = arrayCompleto.getArrayCsv();
 		return csvLeido;
 	}
 	
 	public static Graph crearGrafo (String [][] arrayGrafo) {
 		int j = 0;
-		Graph <Vertex, Edge> gr = new TreeMapGraph <Vertex, Edge> ();
+		Graph gr = new TreeMapGraph();
 		String arrayAux[] = new String[327];
 		int index0 = 0, index1 = 0;
 
@@ -52,7 +52,7 @@ public class Marvel {
 			}
 			Element <String> personaje1 = new DecoratedElement<String>(String.valueOf(index0), arrayGrafo[i][0]);
 			Element <String> personaje2 = new DecoratedElement<String>(String.valueOf(index1), arrayGrafo[i][1]);
-			Edge<DecoratedElement> peso = new DecoratedElement (String.valueOf(j++), arrayGrafo[i][2]);
+			Element <Integer> peso = new DecoratedElement <Integer> (String.valueOf(j++), Integer.parseInt(arrayGrafo[i][2]));
 			gr.insertEdge(personaje1, personaje2, peso);
 		}
 		return gr;
