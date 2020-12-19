@@ -50,7 +50,7 @@ public interface Graph<V, E> {
    * Inserts an edge in the graph, defined by vertex u and v and
    * storing element e. If the graph already contains an edge with the key
    * corresponding to the element e no new edge is added. If no edge stores an
-   * element with the same key than e, a new adge is created and added. If
+   * element with the same key than e, a new edge is created and added. If
    * one of the nodes used to define the edge
    * does not exist in the graph it is created and inserted.
    * @param u First node defining the edge
@@ -78,7 +78,7 @@ public interface Graph<V, E> {
   /**
    * Returns an array with the two end vertices of an edge
    * @param edge The edge whose vertices we want
-   * @return An arry with the two end vertices
+   * @return An array with the two end vertices
    */
   public Vertex<V>[] endVertices (Edge<E> edge);
 
