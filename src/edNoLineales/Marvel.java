@@ -16,47 +16,54 @@ public class Marvel {
 		System.out.println("---------------------------------------");
 		System.out.println("Apartado B:");
 		System.out.println("Camino más corto entre dos personajes introducidos.");
-		String[] personajes;
-		camino(grafo);
+		vertices(grafo, true);
+		
+		resetear(grafo);
+		
+		System.out.println("---------------------------------------");
+		System.out.println("Apartado C:");
+		System.out.println("Equipo con dos personajes introducidos.");
+		vertices(grafo, false);
 	}
 	
-	public static void camino(Graph gr) {
-		String[] personajes= new String[3];
+	public static void vertices(Graph gr, boolean opt) {
 		Scanner lectura = new Scanner(System.in);
 		System.out.print("Introducir nombre de un personaje: ");
 		String personaje1 =lectura.nextLine();
 		System.out.print("Introducir nombre de otro personaje: ");
 		String personaje2 =lectura.nextLine();
-		lectura.close();
+		//lectura.close();
 		
 		Vertex name1=gr.getVertex(personaje1);
 		Vertex name2=gr.getVertex(personaje2);
 		if(name1==null||name2==null) {
 			if(name1==null)System.out.println("Personaje 1 no existe.");
 			if(name2==null)System.out.println("Personaje 2 no existe.");
-			System.out.println("Pruebe otra vez");
-			camino(gr);
+			System.out.println("Pruebe otra vez.");
+			vertices(gr, opt);
 			return;
 		}
-		bfs(gr, name1, name2);
+		busquedaCamino(gr, name1, name2, opt);
 	}
 	
-	public static void bfs(Graph gr, Vertex name1, Vertex name2) {
-	    DecoratedElement startNode, endNode, nx, node = null;
-	    boolean bool1 = true, bool2 = true;
-	    int size;
+	public static void busquedaCamino(Graph gr, Vertex name1, Vertex name2, boolean opt) {
+		DecoratedElement node = null;	
+		boolean noPath;
 	    Vertex<DecoratedElement> aux, s = null, t = null;
+	    Vertex v;
+	    Stack<Vertex> p1 = new Stack(), p2 = new Stack();
 	    Stack <DecoratedElement> sp = new Stack();
-	    Iterator<Vertex<DecoratedElement>> it;
-
-
-	    // Start and last vertices
+	   
+	/*	boolean bool1 = true, bool2 = true, noPath;
+	  	
 	    startNode = new DecoratedElement(name1.getID(), name1.getID());
 	    endNode = new DecoratedElement(name2.getID(), name2.getID());
-
+	 	Iterator<Vertex<DecoratedElement>> it;
 	    it = gr.getVertices();
+
 	    while (it.hasNext() && (bool1 || bool2)) {
 	    	aux = it.next();
+	    	System.out.println(aux);
 	    	nx = aux.getElement();
 	    	if (nx.equals(startNode)) {
 	    		s = aux;
@@ -66,28 +73,43 @@ public class Marvel {
 	    		t = aux;
 	    		bool2 = false;
 	    	}
+	    }*/
+	    ///////////////////////////////////////////////////
+	    if(opt) {
+	    	node = BFS(gr, name1, name2);
+
+		    if (node.getParent() == null)System.out.println("\nNo se ha encontrado un camino entre los personajes.");
+		    else{
+		    	while (node.getParent() != null) {
+		    		sp.push(node);
+		    		node = node.getParent();
+		    	}
+		    	sp.push(node);
+
+		    	int size = sp.size();
+		    	for (int i = 0; i<size; i++){
+		    		node = sp.pop();
+		    		System.out.print(node.getElement().toString() + " -- ");
+		    	}
+		    	System.out.println(" Distancia="+ node.getDistance());
+		     }
 	    }
-	    node = pathBFS(gr, s, t);
-
-	    if (node.getParent() == null)System.out.println("\nNo se ha encontrado un camino");
 	    else {
-	    	while (node.getParent() != null) {
-	    		sp.push(node);
-	    		node = node.getParent();
-	    	}
-	    	sp.push(node);
+		    p1.push(name1);
+		    noPath = DFS(gr, name1, name2, p1);
+		    if (!noPath) {
+		    	while(!p1.isEmpty()) p2.push(p1.pop());
+		    	System.out.println("\nEquipo:");
+		    	while (!p2.isEmpty()) {
+		    		v = p2.pop();
+		    		System.out.println("- " +v.getElement());
+		    	}
+		    } 
+		    else System.out.println("\nNo se ha encontrado ningún equipo para los personajes.");
+	    }
+	}	
 
-	    	size = sp.size();
-	    	for (int i = 0; i<size; i++){
-	    		node = sp.pop();
-	    		System.out.print(node.getElement().toString() + " -- ");
-	    	}
-	    	System.out.print(" Distancia="+ node.getDistance());
-	     }
-	   
-	  }
-
-	public static DecoratedElement pathBFS(Graph g,Vertex s,Vertex t) {
+	public static DecoratedElement BFS(Graph g,Vertex s,Vertex t) {
 		Queue<Vertex<DecoratedElement>> q = new LinkedList();
 		boolean noEnd = true;
 		Vertex<DecoratedElement> u, v = null;
@@ -96,6 +118,7 @@ public class Marvel {
 		
 		((DecoratedElement) s.getElement()).setVisited(true);
 		q.offer(s);
+		
 		while (!q.isEmpty() && noEnd) {
 			u = q.poll();
 			it = g.incidentEdges(u);
@@ -108,12 +131,37 @@ public class Marvel {
 					(v.getElement()).setDistance(((u.getElement()).getDistance()) + 1);
 					q.offer(v);
 					noEnd = !(v.getElement().equals(t.getElement()));
-				}
+				}			
 			}
 		}
 		if (noEnd)v.getElement().setParent(null);
 		return v.getElement();
 	}
+
+	public static boolean DFS(Graph g,Vertex v,Vertex z,Stack<Vertex> sp) {
+		boolean noEnd = !v.equals(z);
+		Edge e;
+		Iterator<Edge<DecoratedElement>> it;
+		Vertex<DecoratedElement> w;
+
+		((DecoratedElement) v.getElement()).setVisited(true);
+
+		it = g.incidentEdges(v);
+		while (it.hasNext() && noEnd) {
+			e = it.next();
+			int e2 = Integer.parseInt(e.getElement().toString());
+			if(e2>9)continue;
+			else {
+				w = g.opposite(v, e);
+				if (!w.getElement().getVisited()) {
+					sp.push(w);
+					noEnd = DFS(g, w, z, sp);
+					if (noEnd) sp.pop();
+				}
+			}
+		}
+    return noEnd;
+  }
 
 	public static void comparador(Graph gr, boolean opt, int prev) {
 		System.out.println();
@@ -174,7 +222,16 @@ public class Marvel {
 		}
 		return gr;
 	}
-	
+	public static void resetear(Graph gr) {
+		Iterator<Vertex<Vertex>> it;
+		it=gr.getVertices();
+		Vertex<Vertex> P;
+		while(it.hasNext()) {
+			P=it.next();
+			((DecoratedElement) P.getElement()).setVisited(false);
+			((DecoratedElement) P).setParent(null);
+		}
+	}
 	public static void printGraph(Graph gr){
 		int y = 0;
 		  Vertex [] v;
