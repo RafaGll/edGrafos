@@ -9,7 +9,8 @@ public class DecoratedElement<T> implements Element, Edge {
 	  private DecoratedElement<T> parent; // Vertex from which
 	                                                // the current node is accessed
 	  private int distance;    // Distance (in vertices) from the original node
-
+	  private int peso;
+	  
 	  public DecoratedElement(String key, T element) {
 	    this.element = element;
 	    ID = key;

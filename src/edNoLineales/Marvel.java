@@ -91,7 +91,7 @@ public class Marvel {
 		    		node = sp.pop();
 		    		System.out.print(node.getElement().toString() + " -- ");
 		    	}
-		    	System.out.println(" Distancia="+ node.getDistance());
+		    	System.out.println(" Distancia = "+ node.getDistance());
 		     }
 	    }
 	    else {
@@ -105,38 +105,9 @@ public class Marvel {
 		    		System.out.println("- " +v.getElement());
 		    	}
 		    } 
-		    else System.out.println("\nNo se ha encontrado ningún equipo para los personajes.");
+		    else System.out.println("\nNo se ha encontrado ningún equipo para esos personajes.");
 	    }
 	}	
-
-	public static DecoratedElement BFS(Graph g,Vertex s,Vertex t) {
-		Queue<Vertex<DecoratedElement>> q = new LinkedList();
-		boolean noEnd = true;
-		Vertex<DecoratedElement> u, v = null;
-		Edge e;
-		Iterator<Edge> it;
-		
-		((DecoratedElement) s.getElement()).setVisited(true);
-		q.offer(s);
-		
-		while (!q.isEmpty() && noEnd) {
-			u = q.poll();
-			it = g.incidentEdges(u);
-			while (it.hasNext() && noEnd) {
-				e = it.next();
-				v = g.opposite(u, e);
-				if (!(v.getElement()).getVisited()) {
-					(v.getElement()).setVisited(true);
-					(v.getElement()).setParent(u.getElement());
-					(v.getElement()).setDistance(((u.getElement()).getDistance()) + 1);
-					q.offer(v);
-					noEnd = !(v.getElement().equals(t.getElement()));
-				}			
-			}
-		}
-		if (noEnd)v.getElement().setParent(null);
-		return v.getElement();
-	}
 
 	public static boolean DFS(Graph g,Vertex v,Vertex z,Stack<Vertex> sp) {
 		boolean noEnd = !v.equals(z);
@@ -160,8 +131,39 @@ public class Marvel {
 				}
 			}
 		}
-    return noEnd;
-  }
+		return noEnd;
+	}
+
+	public static DecoratedElement BFS(Graph g,Vertex s,Vertex t) {
+		Queue<Vertex<DecoratedElement>> q = new LinkedList();
+		boolean noEnd = true;
+		Vertex<DecoratedElement> u, v = null;
+		Edge e;
+		Iterator<Edge> it;
+		
+		((DecoratedElement) s.getElement()).setVisited(true);
+		q.offer(s);
+		
+		while (!q.isEmpty() && noEnd) {
+			u = q.poll();
+			it = g.incidentEdges(u);
+			while (it.hasNext() && noEnd) {
+				e = it.next();
+				int e2 = Integer.parseInt(e.getElement().toString());
+				v = g.opposite(u, e);
+				if (!(v.getElement()).getVisited()) {
+					(v.getElement()).setVisited(true);
+					(v.getElement()).setParent(u.getElement());
+					(v.getElement()).setDistance(((u.getElement()).getDistance()) + 1);
+					q.offer(v);
+					noEnd = !(v.getElement().equals(t.getElement()));
+				}
+				
+			}
+		}
+		if (noEnd)v.getElement().setParent(null);
+		return v.getElement();
+	}
 
 	public static void comparador(Graph gr, boolean opt, int prev) {
 		System.out.println();
@@ -170,16 +172,9 @@ public class Marvel {
 		Iterator<Vertex<Vertex>> ver = gr.getVertices();
 		while(ver.hasNext()) {
 			Vertex vertice = ver.next();
-			vertice=gr.getVertex(vertice.getID());
-			
-			Iterator<Edge<Edge>> edg=gr.incidentEdges(vertice);
-			int pesoAct=0;
-			while(edg.hasNext()) {
-				Edge edge = edg.next();
-				pesoAct+=Integer.parseInt(edge.getElement().toString());
-			}
-			
-			String persAct = vertice.getElement().toString();
+			int pesoAct = pesoPersonaje(gr, vertice);
+				
+			String persAct = vertice.getElement().toString();			
 			if(pesoAct>prev && opt || pesoAct<prev && !opt) {
 				prev=pesoAct;		
 				for(int u=0; u<elementosArray;u++) personajes[u]=null;
@@ -196,6 +191,7 @@ public class Marvel {
 				elementosArray++;
 			}
 		}
+		
 		if(opt)System.out.println("Personajes con más relaciones:");
 		else System.out.println("Personajes con menos relaciones:");
 		for(String print:personajes) {
@@ -203,6 +199,18 @@ public class Marvel {
 			System.out.println("- "+print);
 		}
 		if(opt)comparador(gr, false, prev);
+	}
+	
+	public static int pesoPersonaje(Graph gr, Vertex vertice) {
+		vertice=gr.getVertex(vertice.getID());
+		
+		Iterator<Edge<Edge>> edg=gr.incidentEdges(vertice);
+		int pesoAct=0;
+		while(edg.hasNext()) {
+			Edge edge = edg.next();
+			pesoAct+=Integer.parseInt(edge.getElement().toString());
+		}
+		return pesoAct;
 	}
 	
 	public static String [][] readCsv ()  {
@@ -222,6 +230,7 @@ public class Marvel {
 		}
 		return gr;
 	}
+	
 	public static void resetear(Graph gr) {
 		Iterator<Vertex<Vertex>> it;
 		it=gr.getVertices();
@@ -229,22 +238,7 @@ public class Marvel {
 		while(it.hasNext()) {
 			P=it.next();
 			((DecoratedElement) P.getElement()).setVisited(false);
-			((DecoratedElement) P).setParent(null);
 		}
-	}
-	public static void printGraph(Graph gr){
-		int y = 0;
-		  Vertex [] v;
-		  Iterator<Edge> ite;
-		  System.out.println("Graph");
-		  ite = gr.getEdges();
-		  while (ite.hasNext()) {
-		    v = gr.endVertices(ite.next());
-		    System.out.print(v[0].getElement().toString());
-		    System.out.println("-" + v[1].getElement().toString() + "//");
-		    System.out.println("-" + v[2].getID().toString() + "//");
-		    //System.out.println("//"+v[0].getElement().toString()+"--"+v[1].getElement().toString()+"--"+v[2].getElement().toString());
-		  }
 	}
 	
 }
