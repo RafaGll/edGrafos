@@ -1,11 +1,9 @@
 package edNoLineales;
 import java.util.*;
 
-import graphsDSESIUCLM.Edge;
-import graphsDSESIUCLM.Element;
-import graphsDSESIUCLM.Graph;
-import graphsDSESIUCLM.TreeMapGraph;
-import graphsDSESIUCLM.Vertex;
+import edLineares2020_21.QueueDynamic;
+import edLineares2020_21.StackDynamic;
+import graphsDSESIUCLM.*;
 /**
  * Esta clase ejecuta los distintos apartados, haciendo uso de las distintas clases para la lectura del archivo, creación del grafo y lectura y escritura
  * de los elementos del grafo.
@@ -177,8 +175,8 @@ public class Marvel {
 		boolean noPath;
 	    Vertex<DecoratedElement> aux, s = null, t = null;
 	    Vertex v;
-	    Stack<Vertex> p1 = new Stack(), p2 = new Stack();
-	    Stack <DecoratedElement> sp = new Stack();
+	    StackDynamic<Vertex> p1 = new StackDynamic(null), p2 = new StackDynamic(null);
+	    StackDynamic<DecoratedElement> sp = new StackDynamic(null);
 	    
 	    if(opt) {
 	    	node = BFS(gr, name1, name2);
@@ -222,17 +220,17 @@ public class Marvel {
 	 * @return Valor Elemento decorado en el que finaliza la busqueda
 	 */
 	public static DecoratedElement BFS(Graph g,Vertex s,Vertex t) {
-		Queue<Vertex<DecoratedElement>> q = new LinkedList();
+		QueueDynamic<Vertex> q = new QueueDynamic<Vertex>(null);
 		boolean noEnd = true;
 		Vertex<DecoratedElement> u, v = null;
 		Edge e;
 		Iterator<Edge> it;
 		
 		((DecoratedElement) s.getElement()).setVisited(true);
-		q.offer(s);
+		q.enqueue(s);
 		
 		while (!q.isEmpty() && noEnd) {
-			u = q.poll();
+			u = q.dequeue();
 			it = g.incidentEdges(u);
 			while (it.hasNext() && noEnd) {
 				e = it.next();
@@ -242,10 +240,9 @@ public class Marvel {
 					(v.getElement()).setVisited(true);
 					(v.getElement()).setParent(u.getElement());
 					(v.getElement()).setDistance(((u.getElement()).getDistance()) + 1);
-					q.offer(v);
+					q.enqueue(v);
 					noEnd = !(v.getElement().equals(t.getElement()));
 				}
-				
 			}
 		}
 		if (noEnd)v.getElement().setParent(null);
@@ -257,12 +254,12 @@ public class Marvel {
 	 * @param g Grafo con todos los elementos.
 	 * @param v Vertice(personaje) en el que se inicia la busqueda
 	 * @param z Vertice(personaje) en el que debe finalizar la busqueda
-	 * @param sp Pila en la que se almacenan los vertices por los que pasa (miembros del equipo)
+	 * @param p Pila en la que se almacenan los vertices por los que pasa (miembros del equipo)
 	 * @return Valor booleano que nos permite averiguar cuando termina la recursividad del método así como la existencia de un cámino o no<ul>
 	 * 																							<li>true: Existe un camino entre ambos vértices.</li>
 	 * 																							<li>false: No existe ningún camino entre los vertices.</li>
 	 */
-	public static boolean DFS(Graph g,Vertex v,Vertex z,Stack<Vertex> sp) {
+	public static boolean DFS(Graph g,Vertex v,Vertex z,StackDynamic<Vertex> p) {
 		boolean noEnd = !v.equals(z);
 		Edge e;
 		Iterator<Edge<DecoratedElement>> it;
@@ -278,9 +275,9 @@ public class Marvel {
 			else {
 				w = g.opposite(v, e);
 				if (!w.getElement().getVisited()) {
-					sp.push(w);
-					noEnd = DFS(g, w, z, sp);
-					if (noEnd) sp.pop();
+					p.push(w);
+					noEnd = DFS(g, w, z, p);
+					if (noEnd) p.pop();
 				}
 			}
 		}
@@ -301,6 +298,4 @@ public class Marvel {
 			((DecoratedElement) P.getElement()).setDistance(0);
 		}
 	}
-	
 }// Cierre de la clase
-
