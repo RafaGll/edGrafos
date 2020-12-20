@@ -3,7 +3,15 @@ package edNoLineales;
 import java.io.*;
 import java.util.Scanner;
 import java.util.StringTokenizer;
-
+/**
+ * Esta clase nos permite leer el archivo .csv y guardar los distintos personajes y el peso en un array multidimensional.
+ * 
+ * @author Iván Cantalejo, Rafael González y Daniel Martín.
+ * 
+ * @since 05/12/2020
+ *
+ * @version 1.0
+ */
 public class readCsv {
 
 	String[][] arrayCsv;
@@ -15,6 +23,11 @@ public class readCsv {
 		arrayCsv = new String[9892][3];
 	}
 	
+	/** 
+	 * Método que nos permite guardar en elementos distintos del array cada personaje y peso. Utilizamos un StringTokenizer para marcar "," como separador de elementos.
+	 * También se reemplaza ", " cuando va dentro de un nombre por otro caracter para no dar problemas en la separación de elementos y se vuelve a colocar al guardarlo en el array.
+	 * @return Array multidimensional almacenando todos los elementos del archivo .csv.
+	 */
 	public String[][] getArrayCsv() {
 		File csv = new File(ruta);
 		Scanner lectura = null;

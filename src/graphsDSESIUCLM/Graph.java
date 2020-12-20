@@ -1,5 +1,5 @@
 
-package edNoLineales;
+package graphsDSESIUCLM;
 
 import java.util.TreeMap;
 import java.util.LinkedList;

@@ -1,5 +1,5 @@
 
-package edNoLineales;
+package graphsDSESIUCLM;
 
 /**
  * This class represents the basic functional behavior of an edge in

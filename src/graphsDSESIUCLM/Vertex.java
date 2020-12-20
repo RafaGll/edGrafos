@@ -1,5 +1,5 @@
 
-package edNoLineales;
+package graphsDSESIUCLM;
 
 
 /**

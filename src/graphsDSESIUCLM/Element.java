@@ -1,5 +1,5 @@
 
-package edNoLineales;
+package graphsDSESIUCLM;
 
 /**
  * This interface defines the existence of a string used as an ID for an element

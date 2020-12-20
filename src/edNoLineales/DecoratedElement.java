@@ -1,5 +1,8 @@
 package edNoLineales;
 
+import graphsDSESIUCLM.Edge;
+import graphsDSESIUCLM.Element;
+
 /**
  * Esta clase nos permite crear, modificar y obtener valores de distintos elementos.
  * 
@@ -19,7 +22,7 @@ public class DecoratedElement<T> implements Element, Edge {
 	  private int distance;    // Distance (in vertices) from the original node
 	  private int peso;
 	  /**
-	   * Constructor de elementos.
+	   * Constructor de elementos decorados.
 	   * @param key Cadena de caracteres que nos servirá como ID para identificar el elemento en cuestión.
 	   * @param element Elemento que queremos crear.
 	   */
@@ -60,7 +63,7 @@ public class DecoratedElement<T> implements Element, Edge {
 	  }// Cierre setter
 	  
 	  /**
-	   * getter para obtener el padre de un elemento.
+	   * getter para obtener el padre de un elemento decorado.
 	   * @return Elemento T que corresponde al padre del indicado.
 	   */
 	  public DecoratedElement<T> getParent() {

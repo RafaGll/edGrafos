@@ -1,5 +1,5 @@
 /**
-* This package provides the interfaces and classes needed to work with simple graphs. It is intended as a didactic tool for the
-* Data Structures course taught at the Escuela Superior de Informática of the Castilla-La Mancha University.
+* Este paquete nos permite hacer la lectura de un archivo .csv y utilizar sus datos para crear grafos y realizar distintas
+* implementaciones para recorrerlos.
 */
 package edNoLineales;
