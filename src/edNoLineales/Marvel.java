@@ -1,5 +1,4 @@
 package edNoLineales;
-
 import java.util.*;
 
 public class Marvel {
@@ -238,6 +237,7 @@ public class Marvel {
 		while(it.hasNext()) {
 			P=it.next();
 			((DecoratedElement) P.getElement()).setVisited(false);
+			((DecoratedElement) P.getElement()).setDistance(0);
 		}
 	}
 	
